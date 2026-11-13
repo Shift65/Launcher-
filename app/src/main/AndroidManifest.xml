@@ -1,78 +1,32 @@
-SimpleDateFormat("d MMMM, EEEE", Locale.getDefault()).format(now)
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Column {
-                BasicText(time, style = TextStyle(Color.White, 56.sp, FontWeight.Light))
-                BasicText(date, style = TextStyle(Color(0xFF9A9AAE), 18.sp))
-            }
-            Spacer(Modifier.weight(1f))
-            SettingsButton { openSettings() }
-        }
-    }
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
 
-    @Composable
-    fun SettingsButton(onClick: () -> Unit) {
-        var focused by remember { mutableStateOf(false) }
-        val scale by animateFloatAsState(
-            if (focused) 1.12f else 1f,
-            spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessMedium), label = "s"
-        )
-        Box(
-            Modifier
-                .scale(scale)
-                .clip16()
-                .background(if (focused) Color(0xFF3A3A4C) else Color(0xFF24242F))
-                .onFocusChanged { focused = it.isFocused }
-                .clickable { onClick() }
-                .focusable()
-                .padding(horizontal = 28.dp, vertical = 14.dp)
-        ) {
-            BasicText("Ayarlar", style = TextStyle(Color.White, 18.sp))
-        }
-    }
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
-    @Composable
-    fun AppTile(label: String, icon: Bitmap, onClick: () -> Unit) {
-        var focused by remember { mutableStateOf(false) }
-        val scale by animateFloatAsState(
-            if (focused) 1.18f else 1f,
-            spring(Spring.DampingRatioLowBouncy, Spring.StiffnessMediumLow), label = "t"
-        )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.width(150.dp)
-        ) {
-            Box(
-                Modifier
-                    .size(130.dp)
-                    .scale(scale)
-                    .clip16()
-                    .background(Color(0xFF24242F))
-                    .then(
-                        if (focused) Modifier.border(3.dp, Color.White.copy(alpha = 0.9f), RoundedCornerShape(24.dp))
-                        else Modifier
-                    )
-                    .onFocusChanged { focused = it.isFocused }
-                    .clickable { onClick() }
-                    .focusable()
-                    .padding(18.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(icon.asImageBitmap(), label, Modifier.fillMaxSize())
-            }
-            Spacer(Modifier.height(18.dp))
-            BasicText(
-                label,
-                style = TextStyle(
-                    if (focused) Color.White else Color(0xFF8A8A9E),
-                    16.sp
-                ),
-                maxLines = 1
-            )
-        }
-    }
+    <application
+        android:allowBackup="true"
+        android:label="Minimal Launcher"
+        android:theme="@android:style/Theme.Material.NoActionBar">
 
-    private fun Modifier.clip16() = this.then(
-        Modifier.clip(RoundedCornerShape(24.dp))
-    )
-}
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
